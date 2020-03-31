@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: flask
+spec: 
+  selector: 
+    app: flask-server
+    tier: frontend
+  ports: 
+    - protocol: "TCP"
+      port: 5000
+      targetPort: 5000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: flask
+spec:
+  selector:
+    matchLabels:
+      app: flask-server
+      tier: frontend
+      track: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: flask-server
+        tier: frontend
+        track: stable
+    spec:
+      containers:
+      - name: flask
+        image: "gcr.io/testing-project-272008/src_app"   
